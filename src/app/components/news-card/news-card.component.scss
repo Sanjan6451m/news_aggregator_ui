@@ -1,0 +1,160 @@
+.news-card {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    .card-image img {
+      transform: scale(1.05);
+    }
+  }
+
+  .card-image {
+    height: 40%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    &:hover img {
+      transform: scale(1.05);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.1), transparent);
+    }
+  }
+
+  mat-card-header {
+    padding: 16px;
+    flex-shrink: 0;
+
+    mat-card-title {
+      font-size: 1.25rem;
+      line-height: 1.4;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    mat-card-subtitle {
+      color: #666;
+      font-size: 0.875rem;
+    }
+  }
+
+  mat-card-content {
+    flex-grow: 1;
+    padding: 0 16px 16px;
+    overflow: hidden;
+
+    .summary {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #444;
+      margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .entities-section,
+    .states-section {
+      h4 {
+        margin: 0 0 4px;
+        font-size: 0.8rem;
+        color: rgba(0, 0, 0, 0.6);
+        font-weight: 500;
+      }
+
+      mat-chip-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+
+        ::ng-deep .mat-mdc-chip {
+          height: 20px;
+          font-size: 0.75rem;
+          padding: 0 6px;
+        }
+      }
+    }
+  }
+
+  mat-card-actions {
+    padding: 8px 16px 16px;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: auto;
+
+    a {
+      text-decoration: none;
+    }
+  }
+}
+
+:host-context(.dark-theme) {
+  .news-card {
+    background-color: #1e1e1e;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+    .card-image {
+      background-color: #2d2d2d;
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    &:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    mat-card-header {
+      mat-card-title {
+        color: #fff;
+      }
+
+      mat-card-subtitle {
+        color: #999;
+      }
+    }
+
+    mat-card-content {
+      .summary {
+        color: #ccc;
+      }
+
+      .entities-section,
+      .states-section {
+        h4 {
+          color: rgba(255, 255, 255, 0.6);
+        }
+      }
+    }
+
+    mat-card-actions {
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+} 

@@ -1,0 +1,227 @@
+.news-list-container {
+  padding: 24px;
+  max-width: 1600px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+
+  .filter-section {
+    margin-bottom: 24px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 16px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    mat-form-field {
+      width: 200px;
+      margin: 0;
+      padding: 0;
+
+      ::ng-deep {
+        .mat-mdc-form-field-flex {
+          min-height: 50px;
+        }
+
+        .mat-mdc-form-field-infix {
+          padding: 8px 0;
+          min-height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+        }
+
+        .mat-mdc-form-field-subscript-wrapper {
+          min-height: 0;
+        }
+
+        .mat-mdc-form-field-bottom-align {
+          min-height: 0;
+        }
+
+        .mat-mdc-select-value {
+          text-align: center;
+        }
+      }
+    }
+
+    .theme-toggle {
+      margin-left: auto;
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    .loading-text {
+      color: #666;
+      font-size: 16px;
+      margin: 0;
+      font-weight: 500;
+    }
+  }
+
+  .error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    padding: 24px;
+    background-color: #ffebee;
+    border-radius: 12px;
+    margin: 20px 0;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    .error-message {
+      color: #c62828;
+      font-size: 16px;
+      text-align: center;
+      margin: 0;
+      font-weight: 500;
+    }
+  }
+
+  .news-grid {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 8px;
+    justify-items: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    position: relative;
+    z-index: 1;
+
+    &.loading {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .news-card-wrapper {
+      width: 100%;
+      max-width: 340px;
+      height: 100%;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: translateY(-4px);
+      }
+    }
+  }
+}
+
+// Dark theme styles
+:host-context(.dark-theme) {
+  .news-list-container {
+    background-color: #121212;
+    color: #ffffff;
+
+    .filter-section {
+      background: #1e1e1e;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+      &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      .theme-toggle {
+        color: #999;
+        background: #2d2d2d;
+        
+        &:hover {
+          color: #64b5f6;
+          background: #1a237e;
+        }
+      }
+
+      .filter-field {
+        ::ng-deep {
+          .mat-mdc-select-panel {
+            background-color: #1e1e1e;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+          }
+
+          .mat-mdc-option {
+            color: white;
+
+            &:hover {
+              background-color: rgba(255, 255, 255, 0.04);
+            }
+
+            &.mdc-list-item--selected {
+              background-color: rgba(100, 181, 246, 0.1);
+              color: #64b5f6;
+            }
+          }
+
+          .mat-mdc-select-arrow {
+            color: rgba(255, 255, 255, 0.54);
+          }
+        }
+      }
+    }
+
+    .loading-container {
+      background: #1e1e1e;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+      .loading-text {
+        color: #999;
+      }
+    }
+
+    .error-container {
+      background-color: #311111;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      
+      .error-message {
+        color: #ff8a80;
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .news-list-container {
+    padding: 16px;
+
+    .filter-section {
+      padding: 12px;
+      gap: 12px;
+
+      mat-form-field {
+        width: 100%;
+      }
+    }
+
+    .news-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+} 

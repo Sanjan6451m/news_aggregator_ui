@@ -1,0 +1,24 @@
+@use '@angular/material' as mat;
+
+// Include theme styles for core and each component used in your app.
+@include mat.core();
+
+// Global styles
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+// Utility classes
+.text-center {
+  text-align: center;
+}
+
+.mt-2 {
+  margin-top: 16px;
+}
+
+.mb-2 {
+  margin-bottom: 16px;
+} 

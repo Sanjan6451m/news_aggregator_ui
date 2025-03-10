@@ -1,0 +1,32 @@
+<div class="news-list-container">
+  <div class="filter-section">
+    <div class="filter-field">
+      <mat-form-field appearance="outline" class="mat-elevation-z0">
+        <mat-label>Filter by Topic</mat-label>
+        <mat-select [(ngModel)]="selectedTopic" (selectionChange)="filterByTopic($event.value)" class="topic-select">
+          <mat-option *ngFor="let topic of allTopics" [value]="topic">
+            {{topic === 'all' ? 'All Topics' : topic}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <button mat-icon-button class="theme-toggle" (click)="toggleTheme()">
+      <mat-icon>{{isDarkTheme ? 'light_mode' : 'dark_mode'}}</mat-icon>
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p class="loading-text">Loading news articles...</p>
+  </div>
+
+  <div *ngIf="error" class="error-container">
+    <p class="error-message">{{error}}</p>
+  </div>
+
+  <div class="news-grid" [class.loading]="isLoading">
+    <div class="news-card-wrapper" *ngFor="let article of filteredNews">
+      <app-news-card [article]="article"></app-news-card>
+    </div>
+  </div>
+</div> 

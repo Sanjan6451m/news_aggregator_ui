@@ -1,0 +1,48 @@
+<mat-card class="news-card">
+  <!-- Image Section -->
+  <div class="card-image">
+    <img [src]="currentImageUrl" 
+         [alt]="article.title"
+         (error)="handleImageError($event)">
+  </div>
+
+  <!-- Card Header -->
+  <mat-card-header>
+    <mat-card-title>{{ article.title }}</mat-card-title>
+    <mat-card-subtitle>{{ article.publishedAt | date:'medium' }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <!-- Card Content -->
+  <mat-card-content>
+    <p class="summary">{{ article.summary }}</p>
+    
+    <!-- Commented out Key Entities section
+    <div class="entities-section" *ngIf="article.keyEntities?.length">
+      <h4>Key Entities:</h4>
+      <mat-chip-grid>
+        <mat-chip-row *ngFor="let entity of article.keyEntities" color="primary" selected>
+          {{ entity }}
+        </mat-chip-row>
+      </mat-chip-grid>
+    </div>
+    -->
+
+    <!-- Commented out Affected States section
+    <div class="states-section" *ngIf="article.affectedStates?.length">
+      <h4>Affected States:</h4>
+      <mat-chip-grid>
+        <mat-chip-row *ngFor="let state of article.affectedStates" color="accent" selected>
+          {{ state }}
+        </mat-chip-row>
+      </mat-chip-grid>
+    </div>
+    -->
+  </mat-card-content>
+
+  <!-- Card Actions -->
+  <mat-card-actions>
+    <a mat-button color="primary" [href]="article.url" target="_blank">
+      Read More
+    </a>
+  </mat-card-actions>
+</mat-card> 
