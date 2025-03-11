@@ -40,8 +40,8 @@ server.get('*', async (req, res) => {
 export default server;
 
 // Only run standalone server when not in Vercel
-if (!process.env.VERCEL) {
-  const port = process.env.PORT || 4000;
+if (!process.env['VERCEL']) {
+  const port = process.env['PORT'] || 4000;
   server.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
