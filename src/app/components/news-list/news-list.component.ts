@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, ChangeDetectorRef, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -37,6 +37,7 @@ export class NewsListComponent implements OnInit, AfterViewInit {
   isLoading: boolean = false;
   error: string | null = null;
   isDarkTheme: boolean = false;
+  private isBrowser: boolean;
 
   get allTopics(): string[] {
     return ['all', ...this.topics];
@@ -45,14 +46,19 @@ export class NewsListComponent implements OnInit, AfterViewInit {
   constructor(
     private newsService: NewsService,
     private themeService: ThemeService,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 
   ngOnInit() {
     this.loadNews();
     this.themeService.darkTheme$.subscribe(isDark => {
       this.isDarkTheme = isDark;
-      document.body.classList.toggle('dark-theme', isDark);
+      if (this.isBrowser) {
+        document.body.classList.toggle('dark-theme', isDark);
+      }
       this.cdr.detectChanges();
     });
   }
