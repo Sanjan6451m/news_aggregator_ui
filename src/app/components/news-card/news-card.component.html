@@ -9,13 +9,29 @@
   <!-- Card Header -->
   <mat-card-header>
     <mat-card-title>{{ article.title }}</mat-card-title>
-    <mat-card-subtitle>{{ article.publishedAt | date:'medium' }}</mat-card-subtitle>
+    <mat-card-subtitle>{{ article.publishedAt | date:'mediumDate' }}</mat-card-subtitle>
   </mat-card-header>
 
   <!-- Card Content -->
   <mat-card-content>
     <p class="summary">{{ article.summary }}</p>
     
+    <div class="metadata">
+      <div class="source">
+        <mat-icon>public</mat-icon>
+        {{ article.source }}
+      </div>
+      <div class="sentiment">
+        <mat-icon>trending_up</mat-icon>
+        <span class="sentiment-score" 
+              [class.positive]="article.sentimentScore > 0.6"
+              [class.neutral]="article.sentimentScore >= 0.4 && article.sentimentScore <= 0.6"
+              [class.negative]="article.sentimentScore < 0.4">
+          {{ (article.sentimentScore * 100).toFixed(0) }}%
+        </span>
+      </div>
+    </div>
+
     <!-- Commented out Key Entities section
     <div class="entities-section" *ngIf="article.keyEntities?.length">
       <h4>Key Entities:</h4>
@@ -41,8 +57,9 @@
 
   <!-- Card Actions -->
   <mat-card-actions>
-    <a mat-button color="primary" [href]="article.url" target="_blank">
+    <a mat-button class="read-more-btn" [href]="article.url" target="_blank">
       Read More
+      <mat-icon>arrow_forward</mat-icon>
     </a>
   </mat-card-actions>
 </mat-card> 

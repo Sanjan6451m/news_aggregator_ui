@@ -1,10 +1,14 @@
 export interface NewsArticle {
+  id: string;
   title: string;
-  summary: string;
+  source: string;
   url: string;
+  topic: string;
+  summary: string;
+  sentimentScore: number;
+  keyEntities: string[];
+  affectedStates: string[];
   publishedAt: string;
-  imageUrl?: string;
-  keyEntities?: string[];
-  affectedStates?: string[];
-  sentiment?: number;
+  createdAt: string;
+  imageUrl: string;
 } 

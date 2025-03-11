@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NewsArticle } from '../../models/news-article.model';
+import { NewsArticle } from '../../models/news.interface';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -12,38 +13,55 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     MatCardModule,
     MatChipsModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule
   ],
   templateUrl: './news-card.component.html',
   styleUrls: ['./news-card.component.scss']
 })
 export class NewsCardComponent implements OnInit {
   @Input() article!: NewsArticle;
-  defaultImageUrl = 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=400&h=200&fit=crop&auto=format&q=80';
-
-  get currentImageUrl(): string {
-    return this.article.imageUrl || this.defaultImageUrl;
-  }
+  defaultImageUrl = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=800&auto=format&fit=crop';
+  currentImageUrl: string = '';
 
   ngOnInit() {
-    // Set initial image URL
-    this.article.imageUrl = this.currentImageUrl;
+    this.setInitialImage();
   }
 
-  getSentimentColor(score: number): string {
-    if (score > 0) return 'primary';
-    if (score < 0) return 'warn';
-    return '';
-  }
+  setInitialImage(): void {
+    if (!this.article) {
+      this.currentImageUrl = this.defaultImageUrl;
+      return;
+    }
 
-  getSentimentIcon(score: number): string {
-    if (score > 0) return 'sentiment_very_satisfied';
-    if (score < 0) return 'sentiment_very_dissatisfied';
-    return 'sentiment_neutral';
+    // Check if the article has a valid imageUrl
+    if (this.article.imageUrl && this.isValidUrl(this.article.imageUrl)) {
+      this.currentImageUrl = this.article.imageUrl;
+    } else {
+      this.currentImageUrl = this.defaultImageUrl;
+    }
   }
 
   handleImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    img.src = this.defaultImageUrl;
+    if (img && img.src !== this.defaultImageUrl) {
+      console.log('Image load failed, using default image');
+      img.src = this.defaultImageUrl;
+    }
+  }
+
+  private isValidUrl(url: string): boolean {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  getSentimentClass(score: number): string {
+    if (score > 0.6) return 'positive';
+    if (score >= 0.4 && score <= 0.6) return 'neutral';
+    return 'negative';
   }
 } 
