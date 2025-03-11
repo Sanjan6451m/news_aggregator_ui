@@ -14,7 +14,7 @@ interface NewsResponse {
   providedIn: 'root'
 })
 export class NewsService {
-  private apiUrl = 'http://localhost:5000/api/news';
+  private apiUrl = 'https://news-aggregator-api.vercel.app/api/news';
 
   constructor(private http: HttpClient) { }
 
