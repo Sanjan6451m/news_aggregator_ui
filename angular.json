@@ -90,6 +90,57 @@
           },
           "defaultConfiguration": "development"
         },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/news-aggregator-ui/server",
+            "main": "server.ts",
+            "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media"
+            },
+            "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "news-aggregator-ui:build:development",
+              "serverTarget": "news-aggregator-ui:server:development"
+            },
+            "production": {
+              "browserTarget": "news-aggregator-ui:build:production",
+              "serverTarget": "news-aggregator-ui:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "news-aggregator-ui:build:production",
+              "serverTarget": "news-aggregator-ui:server:production"
+            },
+            "development": {
+              "browserTarget": "news-aggregator-ui:build:development",
+              "serverTarget": "news-aggregator-ui:server:development"
+            }
+          }
+        },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
         },
