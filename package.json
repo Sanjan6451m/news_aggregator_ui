@@ -4,14 +4,16 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && npm run build:ssr",
+    "build": "ng build",
+    "build:ssr": "ng run news-aggregator-ui:server",
+    "build:client": "ng build",
+    "build:vercel": "npm run build:client && npm run build:ssr",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "dev:ssr": "ng run news-aggregator-ui:serve-ssr",
     "serve:ssr": "node dist/news-aggregator-ui/server/server.mjs",
-    "build:ssr": "ng run news-aggregator-ui:server",
     "prerender": "ng run news-aggregator-ui:prerender",
-    "vercel-build": "npm run build"
+    "vercel-build": "npm run build:vercel"
   },
   "private": true,
   "dependencies": {
