@@ -17,16 +17,13 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
   // Serve static files from /browser
-  server.get('**', express.static(browserDistFolder, {
-    maxAge: '1y',
-    index: 'index.html',
+  server.get('*.*', express.static(browserDistFolder, {
+    maxAge: '1y'
   }));
 
   // All regular routes use the Angular engine
-  server.get('**', (req, res, next) => {
+  server.get('*', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
 
     commonEngine
@@ -44,14 +41,17 @@ export function app(): express.Express {
   return server;
 }
 
-function run(): void {
-  const port = process.env['PORT'] || 4000;
+// Export for Vercel
+export default async function handler(req: any, res: any) {
+  const server = app();
+  server(req, res);
+}
 
-  // Start up the Node server
+// Only run standalone server when not in Vercel
+if (!process.env.VERCEL) {
+  const port = process.env.PORT || 4000;
   const server = app();
   server.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
 }
-
-run();

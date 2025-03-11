@@ -2,22 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "server.ts",
+      "src": "dist/news-aggregator-ui/server/server.mjs",
       "use": "@vercel/node"
-    },
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "buildCommand": "npm run build",
-        "outputDirectory": "dist/news-aggregator-ui/browser"
-      }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "server.ts"
+      "dest": "dist/news-aggregator-ui/server/server.mjs"
     }
   ]
 } 

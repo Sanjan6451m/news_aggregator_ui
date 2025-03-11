@@ -11,6 +11,7 @@ import { NewsArticle } from '../../models/news.interface';
 import { ThemeService } from '../../services/theme.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-news-list',
@@ -52,76 +53,78 @@ export class NewsListComponent implements OnInit, AfterViewInit {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
-  ngOnInit() {
-    this.loadNews();
-    this.themeService.darkTheme$.subscribe(isDark => {
-      this.isDarkTheme = isDark;
-      if (this.isBrowser) {
+  async ngOnInit() {
+    if (this.isBrowser) {
+      this.themeService.darkTheme$.subscribe(isDark => {
+        this.isDarkTheme = isDark;
         document.body.classList.toggle('dark-theme', isDark);
-      }
-      this.cdr.detectChanges();
-    });
+        this.cdr.detectChanges();
+      });
+    }
+    await this.loadNews();
   }
 
   ngAfterViewInit() {
-    // Force change detection after view initialization
-    setTimeout(() => {
-      this.cdr.detectChanges();
-    });
+    if (this.isBrowser) {
+      setTimeout(() => {
+        this.cdr.detectChanges();
+      });
+    }
   }
 
-  loadNews() {
-    this.isLoading = true;
-    this.error = null;
-    console.log('Starting to load news...');
-    
-    this.newsService.getNews().subscribe({
-      next: (response) => {
+  async loadNews() {
+    try {
+      this.isLoading = true;
+      this.error = null;
+      
+      if (this.isBrowser) {
+        console.log('Starting to load news...');
+      }
+      
+      const response = await firstValueFrom(this.newsService.getNews());
+      
+      if (this.isBrowser) {
         console.log('Raw response:', response);
-        // Ensure we have an array of articles
-        const articles = Array.isArray(response) ? response : [];
-        
-        if (articles.length === 0) {
-          this.error = 'No news articles found. Please try again later.';
-          this.isLoading = false;
-          this.cdr.detectChanges();
-          return;
-        }
+      }
 
-        // Validate article structure
-        const validArticles = articles.filter(article => 
-          article && 
-          typeof article.title === 'string' &&
-          typeof article.summary === 'string' &&
-          typeof article.topic === 'string'
-        );
+      const articles = Array.isArray(response) ? response : [];
+      
+      if (articles.length === 0) {
+        this.error = 'No news articles found. Please try again later.';
+        return;
+      }
 
-        if (validArticles.length === 0) {
-          this.error = 'Invalid article data received. Please try again later.';
-          this.isLoading = false;
-          this.cdr.detectChanges();
-          return;
-        }
+      const validArticles = articles.filter(article => 
+        article && 
+        typeof article.title === 'string' &&
+        typeof article.summary === 'string' &&
+        typeof article.topic === 'string'
+      );
 
-        this.news = validArticles;
-        this.filteredNews = [...validArticles];
-        this.topics = [...new Set(validArticles.map(article => article.topic))];
+      if (validArticles.length === 0) {
+        this.error = 'Invalid article data received. Please try again later.';
+        return;
+      }
+
+      this.news = validArticles;
+      this.filteredNews = [...validArticles];
+      this.topics = [...new Set(validArticles.map(article => article.topic))];
+      
+      if (this.isBrowser) {
         console.log('Processed articles:', this.news);
         console.log('Available topics:', this.topics);
-        this.isLoading = false;
-        
-        // Force change detection after data is loaded
-        setTimeout(() => {
-          this.cdr.detectChanges();
-        });
-      },
-      error: (error) => {
+      }
+    } catch (error) {
+      this.error = `Failed to load news articles: ${error instanceof Error ? error.message : 'Unknown error'}`;
+      if (this.isBrowser) {
         console.error('Error loading news:', error);
-        this.error = `Failed to load news articles: ${error.message}`;
-        this.isLoading = false;
+      }
+    } finally {
+      this.isLoading = false;
+      if (this.isBrowser) {
         this.cdr.detectChanges();
       }
-    });
+    }
   }
 
   filterByTopic(topic: string): void {
@@ -130,23 +133,24 @@ export class NewsListComponent implements OnInit, AfterViewInit {
     if (topic === 'all') {
       this.filteredNews = [...this.news];
       this.error = null;
-      this.cdr.detectChanges();
-      return;
+    } else {
+      this.filteredNews = this.news.filter(article => article.topic === topic);
+      if (this.filteredNews.length === 0) {
+        this.error = `No articles found for topic: ${topic}`;
+      } else {
+        this.error = null;
+      }
     }
 
-    // Filter articles locally instead of making an API call
-    this.filteredNews = this.news.filter(article => article.topic === topic);
-    
-    if (this.filteredNews.length === 0) {
-      this.error = `No articles found for topic: ${topic}`;
-    } else {
-      this.error = null;
+    if (this.isBrowser) {
+      this.cdr.detectChanges();
     }
-    this.cdr.detectChanges();
   }
 
   toggleTheme() {
-    this.themeService.toggleTheme();
-    this.cdr.detectChanges();
+    if (this.isBrowser) {
+      this.themeService.toggleTheme();
+      this.cdr.detectChanges();
+    }
   }
 } 
