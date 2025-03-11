@@ -6,7 +6,7 @@
       "use": "@vercel/static-build",
       "config": {
         "buildCommand": "npm run build:vercel",
-        "outputDirectory": "dist/news-aggregator-ui"
+        "outputDirectory": "dist/news-aggregator-ui/browser"
       }
     },
     {
@@ -16,23 +16,16 @@
   ],
   "routes": [
     {
-      "src": "/browser/(.*)",
-      "dest": "/browser/$1"
-    },
-    {
       "src": "/assets/(.*)",
-      "dest": "/browser/assets/$1"
+      "dest": "/assets/$1"
     },
     {
       "src": "/(.+\\.[a-z]+)$",
-      "dest": "/browser/$1"
-    },
-    {
-      "handle": "filesystem"
+      "dest": "/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "/server/server.mjs"
+      "dest": "/index.html"
     }
   ]
 } 
